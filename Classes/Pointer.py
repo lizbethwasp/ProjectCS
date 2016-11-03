@@ -1,10 +1,9 @@
-class Pointer:
+class Pointer(object):
 
     def __init__(self, x, y, direction):
         self.__direction = direction % 360
         self.__x = x
         self.__y = y
-
 
     @property
     def x(self):
@@ -27,5 +26,5 @@ class Pointer:
         return self.__direction
 
     @direction.setter
-    def direction(self,d):
-            self.__direction = d % 360
+    def direction(self, direction):
+            self.__direction = direction % 360

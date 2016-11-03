@@ -13,6 +13,7 @@ class Wire(object):
     def I(self,I):
         self.__I = I / 1.0
 
+
     @property
     def x(self):
         return self.__x

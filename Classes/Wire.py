@@ -5,6 +5,13 @@ class Wire(object):
         self.__x = x
         self.__y = y
 
+    @property
+    def I(self):
+        return self.__I
+
+    @I.setter
+    def I(self,I):
+        self.__I = I / 1.0
 
     @property
     def x(self):

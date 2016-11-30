@@ -1,9 +1,21 @@
 class Pointer(object):
 
-    def __init__(self, x, y, direction):
+    def __init__(self, x, y, direction, index):
         self.__direction = direction % 360
         self.__x = x
         self.__y = y
+        self.__index = index
+
+	def draw(canvas,x = self.x, y = self.y):
+		canvas.draw_line()
+
+	@property
+	def index(self):
+		return self.__index
+
+	@index.setter
+	def index(self,index):
+		self.__index = index
 
     @property
     def x(self):

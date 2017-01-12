@@ -1,7 +1,6 @@
 class Wire(object):
 
-    def __init__(self, x, y, direction):
-        self.__direction = direction % 360
+    def __init__(self, x, y, I):
         self.__x = x
         self.__y = y
 
@@ -29,11 +28,3 @@ class Wire(object):
     @y.setter
     def y(self,y):
         self.__y = y
-
-    @property
-    def direction(self):
-        return self.__direction
-
-    @direction.setter
-    def direction(self,d):
-            self.__direction = d % 360

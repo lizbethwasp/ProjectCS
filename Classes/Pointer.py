@@ -1,3 +1,6 @@
+import math
+
+
 class Pointer(object):
 
     def __init__(self, x, y, direction, index):
@@ -5,17 +8,22 @@ class Pointer(object):
         self.__x = x
         self.__y = y
         self.__index = index
+        self.nodes = [(x,y-5), (x,y+5), (x+1,y+1.5), (x-1, y+1.5)]
 
-	def draw(canvas,x = self.x, y = self.y):
-		canvas.draw_line()
+    def rotate_pointer(self, angle):
+        self.direction  = (self.direction + angle) % 360
+        angle = math.radians(angle)
+        mapper = lambda cords: (self.__x + math.cos(angle) * (cords[0] - self.__x) - math.sin(angle) * (cords[1] - self.__y),self.__y + math.sin(angle) * (cords[0] - self.__x) + math.cos(angle) * (cords[1] - self.__y))
+        self.nodes = [*map(mapper, self.nodes)]
 
-	@property
-	def index(self):
-		return self.__index
 
-	@index.setter
-	def index(self,index):
-		self.__index = index
+    @property
+    def index(self):
+        return self.__index
+
+    @index.setter
+    def index(self,index):
+        self.__index = index
 
     @property
     def x(self):
@@ -40,3 +48,9 @@ class Pointer(object):
     @direction.setter
     def direction(self, direction):
             self.__direction = direction % 360
+
+
+a = Pointer(1,1,100,0)
+print(a.nodes)
+a.rotate_pointer(30)
+print(a.nodes)

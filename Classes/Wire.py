@@ -1,8 +1,10 @@
 class Wire(object):
 
-    def __init__(self, x, y, I):
+    def __init__(self, x, y, I, gui_sign):
         self.__x = x
         self.__y = y
+        self.__I = I
+        self.GUI_sign = gui_sign
 
     @property
     def I(self):
@@ -10,8 +12,7 @@ class Wire(object):
 
     @I.setter
     def I(self,I):
-        self.__I = I / 1.0
-
+        self.__I = I
 
     @property
     def x(self):

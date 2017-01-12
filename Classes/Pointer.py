@@ -3,19 +3,20 @@ import math
 
 class Pointer(object):
 
-    def __init__(self, x, y, direction, index):
+    def __init__(self, x, y, direction, height, width):
         self.__direction = direction % 360
         self.__x = x
         self.__y = y
-        self.__index = index
-        self.nodes = [(x,y-5), (x,y+5), (x+1,y+1.5), (x-1, y+1.5)]
+        self.nodes = [(x, y-5), (x, y+5), (x+1, y+1.5), (x-1, y+1.5)]
 
     def rotate_pointer(self, angle):
         self.direction  = (self.direction + angle) % 360
         angle = math.radians(angle)
-        mapper = lambda cords: (self.__x + math.cos(angle) * (cords[0] - self.__x) - math.sin(angle) * (cords[1] - self.__y),self.__y + math.sin(angle) * (cords[0] - self.__x) + math.cos(angle) * (cords[1] - self.__y))
-        self.nodes = [*map(mapper, self.nodes)]
 
+        def mapper(cords):
+            return(self.__x + math.cos(angle) * (cords[0] - self.__x) - math.sin(angle) * (cords[1] - self.__y),self.__y + math.sin(angle) * (cords[0] - self.__x) + math.cos(angle) * (cords[1] - self.__y))
+
+        self.nodes = [*map(mapper, self.nodes)]
 
     @property
     def index(self):
@@ -48,9 +49,3 @@ class Pointer(object):
     @direction.setter
     def direction(self, direction):
             self.__direction = direction % 360
-
-
-a = Pointer(1,1,100,0)
-print(a.nodes)
-a.rotate_pointer(30)
-print(a.nodes)

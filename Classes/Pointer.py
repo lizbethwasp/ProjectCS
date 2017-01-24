@@ -1,30 +1,28 @@
 import math
 
-
 class Pointer(object):
 
-    def __init__(self, x, y, direction, height, width):
-        self.__direction = direction % 360
+    ARROWSIZE = 15
+
+    def __init__(self, x, y, canvas, color):
+        self.__direction = 0
         self.__x = x
         self.__y = y
-        self.nodes = [(x, y-5), (x, y+5), (x+1, y+1.5), (x-1, y+1.5)]
+        self.__color = color
+        self.canvas = canvas
+        self.nodes = [(x, y - self.ARROWSIZE / 2),(x + self.ARROWSIZE / 2, y + self.ARROWSIZE / 2), (x - self.ARROWSIZE / 2, y+ self.ARROWSIZE / 2),(x, y - self.ARROWSIZE / 2)]
+        self.GUI_sign = canvas.create_line(self.nodes, fill=color)
 
     def rotate_pointer(self, angle):
-        self.direction  = (self.direction + angle) % 360
+        self.direction = (self.direction + angle) % 360
         angle = math.radians(angle)
 
         def mapper(cords):
-            return(self.__x + math.cos(angle) * (cords[0] - self.__x) - math.sin(angle) * (cords[1] - self.__y),self.__y + math.sin(angle) * (cords[0] - self.__x) + math.cos(angle) * (cords[1] - self.__y))
+            return self.__x + math.cos(angle) * (cords[0] - self.__x) - math.sin(angle) * (cords[1] - self.__y),self.__y + math.sin(angle) * (cords[0] - self.__x) + math.cos(angle) * (cords[1] - self.__y)
 
         self.nodes = [*map(mapper, self.nodes)]
-
-    @property
-    def index(self):
-        return self.__index
-
-    @index.setter
-    def index(self,index):
-        self.__index = index
+        self.canvas.delete(self.GUI_sign)
+        self.redraw()
 
     @property
     def x(self):
@@ -49,3 +47,7 @@ class Pointer(object):
     @direction.setter
     def direction(self, direction):
             self.__direction = direction % 360
+
+    def redraw(self):
+        self.GUI_sign
+        self.GUI_sign = self.canvas.create_line(self.nodes,fill = self.__color)

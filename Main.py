@@ -1,3 +1,10 @@
+# Title of IA Solution
+#  ______
+# IDE - PyCharm Community Edition
+# Python 3.6
+# Platform - Windows, Mac Linux
+
+
 from View import *
 from Controller import *
 

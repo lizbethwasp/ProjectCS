@@ -1,3 +1,9 @@
+# Title of IA Solution
+#  ______
+# IDE - PyCharm Community Edition
+# Python 3.6
+# Platform - Windows, Mac Linux
+
 class Wire(object):
 
     def __init__(self, x, y, I, gui_sign):

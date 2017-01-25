@@ -41,3 +41,5 @@ class GUI:
 
 
 	def show(self):
+		self.canvas.pack()
+		self.root.mainloop()

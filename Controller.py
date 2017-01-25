@@ -31,7 +31,7 @@ class Controller:
 
         for x in (range(1, len(self.GUI.grid['h']))):
             for y in (range(1, len(self.GUI.grid['v']))):
-                self.pointers.append(Pointer(x * ppgh,y * ppgv, self.GUI.canvas, color=color))
+                self.pointers.append(Pointer(x * ppgh, y * ppgv, self.GUI.canvas, color=color))
 
     def mag_field_force(self, I, r):
         return I / (2 * math.pi * r)
@@ -56,6 +56,7 @@ class Controller:
             angles_lambda = lambda x: self.calc_angle([x.x,x.y],[wire.x,wire.y],[wire.x,wire.y + math.sqrt((x.x - wire.x) ** 2 + (x.y - wire.y) ** 2)])
             powers = [*map(power_lambda,self.pointers)]
             angles = [*map(angles_lambda,self.pointers)]
+            print([*map(angles_lambda,self.pointers)])
             for ptr in range(len(self.pointers)):
                 if powers[ptr] > 0.001:
                     self.pointers[ptr].rotate_pointer(angles[ptr])

@@ -16,7 +16,8 @@ class Pointer(object):
         self.__y = y
         self.__color = color
         self.canvas = canvas
-        self.nodes = [(x, y - self.ARROWSIZE / 2),(x + self.ARROWSIZE / 2, y + self.ARROWSIZE / 2), (x - self.ARROWSIZE / 2, y+ self.ARROWSIZE / 2),(x, y - self.ARROWSIZE / 2)]
+        self.nodes = [(x, y - self.ARROWSIZE / 2),(x + self.ARROWSIZE / 3, y + self.ARROWSIZE / 2), (x - self.ARROWSIZE / 3, y+ self.ARROWSIZE / 2),(x, y - self.ARROWSIZE / 2)]
+        #[(x, y - self.ARROWSIZE / 2),(x + self.ARROWSIZE / 2, y + self.ARROWSIZE / 2), (x - self.ARROWSIZE / 2, y+ self.ARROWSIZE / 2),(x, y - self.ARROWSIZE / 2)]
         self.GUI_sign = canvas.create_line(self.nodes, fill=color)
 
     def rotate_pointer(self, angle):

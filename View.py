@@ -36,9 +36,6 @@ class GUI:
 		self.grid = g
 
 
-	def draw_pointer(self,pointer,color):
-		self.canvas.create_line(pointer.nodes, fill = color)
-
 
 	def show(self):
 		self.canvas.pack()

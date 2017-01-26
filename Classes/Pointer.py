@@ -8,15 +8,14 @@ import math
 
 class Pointer(object):
 
-    ARROWSIZE = 15
-
-    def __init__(self, x, y, canvas, color):
+    def __init__(self, x, y, canvas, color,size):
         self.__direction = 0
         self.__x = x
         self.__y = y
+        self.size = size
         self.__color = color
         self.canvas = canvas
-        self.nodes = [(x, y - self.ARROWSIZE / 2),(x + self.ARROWSIZE / 3, y + self.ARROWSIZE / 2), (x - self.ARROWSIZE / 3, y+ self.ARROWSIZE / 2),(x, y - self.ARROWSIZE / 2)]
+        self.nodes = [(x, y - self.size / 2), (x + self.size / 3, y + self.size / 2), (x - self.size / 3, y + self.size / 2), (x, y - self.size / 2)]
         #[(x, y - self.ARROWSIZE / 2),(x + self.ARROWSIZE / 2, y + self.ARROWSIZE / 2), (x - self.ARROWSIZE / 2, y+ self.ARROWSIZE / 2),(x, y - self.ARROWSIZE / 2)]
         self.GUI_sign = canvas.create_line(self.nodes, fill=color)
 

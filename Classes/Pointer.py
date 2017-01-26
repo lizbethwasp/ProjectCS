@@ -5,6 +5,7 @@
 # Platform - Windows, Mac Linux
 
 import math
+import tkinter
 
 class Pointer(object):
 
@@ -15,8 +16,8 @@ class Pointer(object):
         self.size = size
         self.__color = color
         self.canvas = canvas
-        self.nodes = [(x, y - self.size / 2), (x + self.size / 3, y + self.size / 2), (x - self.size / 3, y + self.size / 2), (x, y - self.size / 2)]
-        self.GUI_sign = canvas.create_line(self.nodes, fill=color)
+        self.nodes = [(x,y+size),(x,y-size)]
+        self.GUI_sign = canvas.create_line(self.nodes, fill=color, arrow=tkinter.FIRST,arrowshape = [2 * size - 4, 2*size - 2, size // 2  ])
 
     def rotate_pointer(self, angle):
         self.direction = (self.direction + angle) % 360
@@ -54,5 +55,4 @@ class Pointer(object):
             self.__direction = direction % 360
 
     def redraw(self):
-        self.GUI_sign
-        self.GUI_sign = self.canvas.create_line(self.nodes,fill = self.__color)
+        self.GUI_sign = self.canvas.create_line(self.nodes,fill = self.__color, arrow=tkinter.FIRST,arrowshape = [2 * self.size - 4, 2*self.size - 2, self.size // 2  ])

@@ -1,8 +1,8 @@
 # Title of IA Solution
-#  ______
+# Main.by
 # IDE - PyCharm Community Edition
-# Python 3.6
-# Platform - Windows, Mac Linux
+# Python 3.6.0
+# Platform - PC
 
 
 from View import *

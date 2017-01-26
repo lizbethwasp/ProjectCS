@@ -62,4 +62,4 @@ class Controller:
                 if powers[ptr] > 0.001:
                     self.pointers[ptr].rotate_pointer(angles[ptr]+90)
                 elif powers[ptr] < -0.001:
-                    self.pointers[ptr].rotate_pointer(90-angles[ptr])
+                    self.pointers[ptr].rotate_pointer(angles[ptr]+270)

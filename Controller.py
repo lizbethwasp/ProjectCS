@@ -19,8 +19,8 @@ class Controller:
     def __init__(self, GUI):
         self.GUI = GUI
 
-    def place_wire(self, x, y, I, color):
-        self.wires.append(Wire(x,y,I,self.GUI.canvas.create_oval(x+10,y+10,x-10,y-10,fill=color)))
+    def place_wire(self, x, y, I, color, size):
+        self.wires.append(Wire(x, y, I, color, size, self.GUI.canvas))
 
     def draw_arrows(self, color):
         ppgv = self.GUI.canvas_width / len(self.GUI.grid['v']) # Pointers per grid vertical
@@ -41,7 +41,7 @@ class Controller:
         b = (p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2
         c = (p2[0] - p0[0]) ** 2 + (p2[1] - p0[1]) ** 2
         in_rad = math.acos((a + b - c) / math.sqrt(4 * a * b))
-        if (p2[0] < p0[0] or p2[1] < p0[1]):
+        if p2[0] < p0[0] or p2[1] < p0[1]:
             return 360 - int(in_rad * 180 / math.pi)
         return int(in_rad * 180 / math.pi)
 
@@ -50,7 +50,7 @@ class Controller:
 
     def calc_power(self, pointer, wire):
         distance = math.sqrt((pointer.x - wire.x) ** 2 + (pointer.y - wire.y) ** 2)
-        return self.mag_field_force(wire.I,distance)
+        return self.mag_field_force(wire.I, distance)
 
     def update_grid(self):
         for wire in self.wires:
@@ -60,6 +60,12 @@ class Controller:
             angles = [*map(angles_lambda,self.pointers)]
             for ptr in range(len(self.pointers)):
                 if powers[ptr] > 0.001:
-                    self.pointers[ptr].rotate_pointer(angles[ptr]+90)
+                    if self.pointers[ptr].direction == 0:
+                       self.pointers[ptr].rotate_pointer(270)
+                    self.pointers[ptr].rotate_pointer(angles[ptr])
                 elif powers[ptr] < -0.001:
-                    self.pointers[ptr].rotate_pointer(angles[ptr]+270)
+                    if self.pointers[ptr].direction == 0:
+                       self.pointers[ptr].rotate_pointer(90)
+                    self.pointers[ptr].rotate_pointer(angles[ptr])
+        for wire in self.wires:
+            wire.redraw()

@@ -4,6 +4,8 @@
 # Python 3.6
 # Platform - Windows, Mac Linux
 
+
+
 class Wire(object):
 
     def __init__(self, x, y, I, color, size, canvas):
@@ -14,6 +16,8 @@ class Wire(object):
         self.size = size
         self.canvas = canvas
         self.GUI_sign = canvas.create_oval(x+size, y+size, x-size, y-size, fill=color)
+        self.canvas.itemconfig(self.GUI_sign, tags= "wire" + str(self.GUI_sign))
+
 
     @property
     def I(self):
@@ -40,4 +44,5 @@ class Wire(object):
         self.__y = y
 
     def redraw(self):
-        self.canvas.GUI_sign = self.canvas.create_oval(self.x+self.size, self.y+self.size, self.x-self.size, self.y-self.size, fill=self.color)
+        self.canvas.delete(self.GUI_sign)
+        self.GUI_sign = self.canvas.create_oval(self.x+self.size, self.y+self.size, self.x-self.size, self.y-self.size, fill=self.color)

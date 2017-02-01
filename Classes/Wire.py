@@ -5,44 +5,48 @@
 # Platform - PC
 
 
-
 class Wire(object):
 
     def __init__(self, x, y, I, color, size, canvas):
-        self.__x = x
-        self.__y = y
-        self.__I = I
+        self.x = x
+        self.y = y
+        self.I = I
         self.color = color
         self.size = size
         self.canvas = canvas
+
+        if self.I > 0:
+            self.direction_sign = canvas.create_oval(x + size // 2, y + size // 2, x - size // 2, y - size // 2,
+                                                     fill="black")
+        else:
+            self.direction_sign = canvas.create_line([(x, y), (x + size // 2, y + size // 2), (x, y), (x - size // 2,
+                                                                                                       y - size // 2),
+                                                      (x, y), (x - size // 2, y + size // 2),
+                                                      (x, y), (x + size // 2, y - size // 2)], fill="black")
+
         self.GUI_sign = canvas.create_oval(x+size, y+size, x-size, y-size, fill=color)
-        self.canvas.itemconfig(self.GUI_sign, tags= "wire" + str(self.GUI_sign))
+        self.canvas.itemconfig(self.GUI_sign, tags="wire" + str(self.GUI_sign))
 
-
-    @property
-    def I(self):
-        return self.__I
-
-    @I.setter
-    def I(self,I):
-        self.__I = I
-
-    @property
-    def x(self):
-        return self.__x
-
-    @x.setter
-    def x(self,x):
-        self.__x = x
-
-    @property
-    def y(self):
-        return self.__y
-
-    @y.setter
-    def y(self,y):
-        self.__y = y
+    def destroy(self):
+        self.canvas.delete(self.GUI_sign)
+        self.canvas.delete(self.direction_sign)
+        del self
 
     def redraw(self):
         self.canvas.delete(self.GUI_sign)
-        self.GUI_sign = self.canvas.create_oval(self.x+self.size, self.y+self.size, self.x-self.size, self.y-self.size, fill=self.color)
+        self.canvas.delete(self.direction_sign)
+        self.GUI_sign = self.canvas.create_oval(self.x+self.size, self.y+self.size, self.x-self.size, self.y-self.size,
+                                                fill=self.color)
+        if self.I > 0:
+            self.direction_sign = self.canvas.create_oval(self.x + self.size // 2, self.y + self.size // 2,
+                                                          self.x - self.size // 2, self.y - self.size // 2,
+                                                          fill="black")
+        else:
+            self.direction_sign = self.canvas.create_line([(self.x, self.y), (self.x + self.size // 2,
+                                                                              self.y + self.size // 2),
+                                                           (self.x, self.y),
+                                                           (self.x - self.size // 2, self.y - self.size // 2),
+                                                           (self.x, self.y), (self.x - self.size // 2,
+                                                                              self.y + self.size // 2),
+                                                           (self.x, self.y), (self.x + self.size // 2,
+                                                                              self.y - self.size // 2)], fill="black")

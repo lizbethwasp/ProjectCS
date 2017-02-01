@@ -27,6 +27,11 @@ class Wire(object):
         self.GUI_sign = canvas.create_oval(x+size, y+size, x-size, y-size, fill=color)
         self.canvas.itemconfig(self.GUI_sign, tags="wire" + str(self.GUI_sign))
 
+    def destroy(self):
+        self.canvas.delete(self.GUI_sign)
+        self.canvas.delete(self.direction_sign)
+        del self
+
     def redraw(self):
         self.canvas.delete(self.GUI_sign)
         self.canvas.delete(self.direction_sign)

@@ -21,10 +21,10 @@ class GUI:
         self.root.add(self.canvas)
         self.active_wire_label = tkinter.Label(self.root)
         self.root.add(self.active_wire_label)
-        self.active_wire_label.pack()
         self.scale = tkinter.Scale(self.root, from_=-2, to=2, resolution=0.01, orient=tkinter.HORIZONTAL)
-        self.scale.pack()
         self.root.add(self.scale)
+        self.delButton = tkinter.Button(self.root,text="Delete")
+        self.root.add(self.delButton)
 
     def draw_grid(self, line_number, color):
 
@@ -47,5 +47,8 @@ class GUI:
         self.grid = g
 
     def show(self):
+        self.active_wire_label.pack()
         self.canvas.pack()
+        self.scale.pack()
+        self.delButton.pack()
         tkinter.mainloop()

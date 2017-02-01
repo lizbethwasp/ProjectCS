@@ -7,6 +7,7 @@
 import math
 import tkinter
 
+
 class Pointer(object):
 
     def __init__(self, x, y, canvas, color, size):

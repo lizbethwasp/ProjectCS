@@ -38,6 +38,10 @@ class Controller:
                 self.active_wire = wire
                 self.GUI.scale.set(self.active_wire.I)
                 self.GUI.active_wire_label["text"] = "Current wire: " + self.active_wire.color
+            else:
+                self.GUI.active_wire_label["text"] = "Current wire: None"
+                self.GUI.scale.set(0)
+
     def transit_wire(self, event):
         if self.active_wire:
             self.active_wire.x = event.x

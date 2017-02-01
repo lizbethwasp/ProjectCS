@@ -22,7 +22,7 @@ class GUI:
         self.active_wire_label = tkinter.Label(self.root)
         self.root.add(self.active_wire_label)
         self.active_wire_label.pack()
-        self.scale = tkinter.Scale(self.root, from_=-10, to=10, resolution=0.01, orient=tkinter.HORIZONTAL)
+        self.scale = tkinter.Scale(self.root, from_=-2, to=2, resolution=0.01, orient=tkinter.HORIZONTAL)
         self.root.add(self.scale)
 
     def draw_grid(self,line_number, color):

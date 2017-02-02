@@ -28,7 +28,7 @@ class Pointer(object):
         self.redraw()
 
     def rotate_pointer(self, angle):
-        self.direction = angle % 360
+        self.direction += angle
         angle = math.radians(angle)
 
         def mapper(cords):

@@ -16,6 +16,8 @@ class Controller:
 
     wires = []
 
+    grid = {}
+
     def __init__(self, GUI):
         self.GUI = GUI
         self.GUI.canvas.bind("<Button-1>", lambda event: self.detect_wire(event))
@@ -69,14 +71,14 @@ class Controller:
         self.update_grid()
 
     def draw_arrows(self, color):
-        ppgv = self.GUI.canvas_width / len(self.GUI.grid['v'])  # Pointers per grid vertical
-        ppgh = self.GUI.canvas_height / len(self.GUI.grid['h'])  # Pointers per grid horizontal
+        ppgv = self.GUI.canvas_width / len(self.grid['v'])  # Pointers per grid vertical
+        ppgh = self.GUI.canvas_height / len(self.grid['h'])  # Pointers per grid horizontal
 
-        if len(self.GUI.grid) == 0:
+        if len(self.grid) == 0:
             raise Exception("Draw Grid first")
 
-        for x in (range(1, len(self.GUI.grid['h']))):
-            for y in (range(1, len(self.GUI.grid['v']))):
+        for x in (range(1, len(self.grid['h']))):
+            for y in (range(1, len(self.grid['v']))):
                 self.pointers.append(Pointer(x * ppgh, y * ppgv, self.GUI.canvas, color=color, size=15))
 
     def mag_field_force(self, I, r):
@@ -95,6 +97,27 @@ class Controller:
         distance = math.sqrt((pointer.x - wire.x) ** 2 + (pointer.y - wire.y) ** 2)
         return self.mag_field_force(wire.I, distance)
 
+    def draw_grid(self, line_number, color):
+
+        if len(self.grid) != 0:
+            raise Exception("Must be only one Grid")
+
+        g = {}  # Grid
+        v = []  # Verticals
+        h = []  # Horizontals
+
+        for x in range(line_number):
+            v.append(self.GUI.canvas.create_line(0, (self.GUI.canvas_width / line_number) * x,
+                                             self.GUI.canvas_width,
+                                             (self.GUI.canvas_width / line_number) * x, fill=color))
+            h.append(self.GUI.canvas.create_line((self.GUI.canvas_width / line_number) * x, 0,
+                                             (self.GUI.canvas_width / line_number) * x,
+                                                 self.GUI.canvas_width, fill=color))
+
+        g["h"] = h
+        g["v"] = v
+        self.grid = g
+
     def update_grid(self):
         print("Upd grid...")
         for ptr in range(len(self.pointers)):
@@ -106,8 +129,6 @@ class Controller:
                                                                  (x.y - wire.y) ** 2)], [wire.x, wire.y],
                                                       [x.x, x.y])
             powers = [*map(power_lambda, self.pointers)]
-            print(min(powers))
-            print(max(powers))
             angles = [*map(angles_lambda, self.pointers)]
             for ptr in range(len(self.pointers)):
                 cur_ptr = self.pointers[ptr]
@@ -117,13 +138,13 @@ class Controller:
                             angles[ptr])
                     else:
                         cur_ptr.rotate_pointer(
-                            (cur_ptr.direction + angles[ptr])/2)
+                            angles[ptr])
                 elif powers[ptr] < -0.001:
                     if int(cur_ptr.direction) == 90:
                         cur_ptr.rotate_pointer(
-                            (cur_ptr.direction + angles[ptr]) / 2)
+                            cur_ptr.direction)
                     else:
                         cur_ptr.rotate_pointer(
-                            angles[ptr]//2)
+                            angles[ptr])
         for wire in self.wires:
             wire.redraw()

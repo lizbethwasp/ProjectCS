@@ -16,63 +16,69 @@ class Controller:
 
     wires = []
 
+    grid = {}
+
     def __init__(self, GUI):
         self.GUI = GUI
         self.GUI.canvas.bind("<Button-1>", lambda event: self.detect_wire(event))
         self.GUI.canvas.bind("<B1-Motion>", lambda event: self.transit_wire(event))
-        self.GUI.canvas.bind("<ButtonRelease-1>", lambda event: self.move_wire(event))
-        self.GUI.canvas.bind("<Button-2>", lambda event: self.place_wire(event.x, event.y, 1, color="Red", size=15))
-        self.GUI.scale["command"] = self.update_wire_I
-        self.GUI.scale.bind("<ButtonRelease-1>", lambda event: self.update_grid())
-        self.GUI.active_wire_label["text"] = "Current wire: None"
+        # self.GUI.canvas.bind("<ButtonRelease-1>", lambda event: self.move_wire(event))
+        self.GUI.canvas.bind("<Button-2>", lambda event: self.place_wire(event.x, event.y, 0, color="Red", size=15))
+        self.GUI.scale.bind("<B1-Motion>",self.update_wire_I)
+        # self.GUI.scale.bind("<ButtonRelease-1>", lambda event: self.update_grid())
         self.GUI.delButton["command"] = self.delete_wire
-        self.active_wire = None
+        self.active_wire = 0
 
     def delete_wire(self):
-        self.active_wire.destroy()
-        self.wires.remove(self.active_wire)
-        self.update_grid()
+        print("Del wire")
+        if self.active_wire:
+            self.active_wire.destroy()
+            self.wires.remove(self.active_wire)
+            self.update_grid()
 
     def update_wire_I(self, event):
         if self.active_wire:
             self.active_wire.I = self.GUI.scale.get()
+            self.update_grid()
+            print("Wire I changed")
 
     def detect_wire(self, event):
-        self.active_wire = None
         for wire in self.wires:
-            if wire.GUI_sign == event.widget.find_closest(event.x, event.y)[0]:
+            if wire.GUI_sign in event.widget.find_closest(event.x, event.y):
                 self.active_wire = wire
+                print("Wire detected")
                 self.GUI.scale.set(self.active_wire.I)
-                self.GUI.active_wire_label["text"] = "Current wire: " + self.active_wire.color
-            else:
-                self.GUI.active_wire_label["text"] = "Current wire: None"
-                self.GUI.scale.set(0)
 
     def transit_wire(self, event):
         if self.active_wire:
             self.active_wire.x = event.x
             self.active_wire.y = event.y
             self.active_wire.redraw()
+            self.update_grid()
+
+            print("Wire transited")
 
     def move_wire(self, event):
         self.transit_wire(event)
+        print("Wire moved")
         if not self.active_wire:
             return
-        self.update_grid()
 
     def place_wire(self, x, y, I, color, size):
+        print("Wire placed")
         self.wires.append(Wire(x, y, I, color, size, self.GUI.canvas))
+        self.active_wire = self.wires[-1]
         self.update_grid()
 
     def draw_arrows(self, color):
-        ppgv = self.GUI.canvas_width / len(self.GUI.grid['v'])  # Pointers per grid vertical
-        ppgh = self.GUI.canvas_height / len(self.GUI.grid['h'])  # Pointers per grid horizontal
+        ppgv = self.GUI.canvas_width / len(self.grid['v'])  # Pointers per grid vertical
+        ppgh = self.GUI.canvas_height / len(self.grid['h'])  # Pointers per grid horizontal
 
-        if len(self.GUI.grid) == 0:
+        if len(self.grid) == 0:
             raise Exception("Draw Grid first")
 
-        for x in (range(1, len(self.GUI.grid['h']))):
-            for y in (range(1, len(self.GUI.grid['v']))):
+        for x in (range(1, len(self.grid['h']))):
+            for y in (range(1, len(self.grid['v']))):
                 self.pointers.append(Pointer(x * ppgh, y * ppgv, self.GUI.canvas, color=color, size=15))
 
     def mag_field_force(self, I, r):
@@ -91,7 +97,29 @@ class Controller:
         distance = math.sqrt((pointer.x - wire.x) ** 2 + (pointer.y - wire.y) ** 2)
         return self.mag_field_force(wire.I, distance)
 
+    def draw_grid(self, line_number, color):
+
+        if len(self.grid) != 0:
+            raise Exception("Must be only one Grid")
+
+        g = {}  # Grid
+        v = []  # Verticals
+        h = []  # Horizontals
+
+        for x in range(line_number):
+            v.append(self.GUI.canvas.create_line(0, (self.GUI.canvas_width / line_number) * x,
+                                             self.GUI.canvas_width,
+                                             (self.GUI.canvas_width / line_number) * x, fill=color))
+            h.append(self.GUI.canvas.create_line((self.GUI.canvas_width / line_number) * x, 0,
+                                             (self.GUI.canvas_width / line_number) * x,
+                                                 self.GUI.canvas_width, fill=color))
+
+        g["h"] = h
+        g["v"] = v
+        self.grid = g
+
     def update_grid(self):
+        print("Upd grid...")
         for ptr in range(len(self.pointers)):
             self.pointers[ptr].rotate_to_0()
         for wire in self.wires:
@@ -103,13 +131,20 @@ class Controller:
             powers = [*map(power_lambda, self.pointers)]
             angles = [*map(angles_lambda, self.pointers)]
             for ptr in range(len(self.pointers)):
-                if powers[ptr] > 0.001:
-                    if self.pointers[ptr].direction == 0:
-                        self.pointers[ptr].rotate_pointer(90)
-                    self.pointers[ptr].rotate_pointer(angles[ptr])
+                cur_ptr = self.pointers[ptr]
+                if math.fabs(powers[ptr]) > 0.001:
+                    if int(cur_ptr.direction) == 90:
+                        cur_ptr.rotate_pointer(
+                            angles[ptr])
+                    else:
+                        cur_ptr.rotate_pointer(
+                            angles[ptr])
                 elif powers[ptr] < -0.001:
-                    if self.pointers[ptr].direction == 0:
-                        self.pointers[ptr].rotate_pointer(270)
-                    self.pointers[ptr].rotate_pointer(angles[ptr])
+                    if int(cur_ptr.direction) == 90:
+                        cur_ptr.rotate_pointer(
+                            cur_ptr.direction)
+                    else:
+                        cur_ptr.rotate_pointer(
+                            angles[ptr])
         for wire in self.wires:
             wire.redraw()

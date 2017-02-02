@@ -11,24 +11,24 @@ import tkinter
 class Pointer(object):
 
     def __init__(self, x, y, canvas, color, size):
-        self.__direction = 0
+        self.__direction = 90
         self.x = x
         self.y = y
         self.size = size
         self.color = color
         self.canvas = canvas
-        self.nodes = [(x, y+size), (x, y-size)]
+        self.nodes = [(x-size, y), (x+size, y)]
         self.GUI_sign = canvas.create_line(self.nodes, fill=color, arrow=tkinter.FIRST,
                                            arrowshape=[2 * size - size // 2,
                                                        2 * size, size // 2])
 
     def rotate_to_0(self):
-        self.direction = 0
-        self.nodes = [(self.x, self.y+self.size), (self.x, self.y-self.size)]
+        self.direction = 90
+        self.nodes = [(self.x-self.size, self.y), (self.x+self.size, self.y)]
         self.redraw()
 
     def rotate_pointer(self, angle):
-        self.direction = (self.direction + angle) % 360
+        self.direction = angle % 360
         angle = math.radians(angle)
 
         def mapper(cords):

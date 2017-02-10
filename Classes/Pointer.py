@@ -10,6 +10,7 @@ import tkinter
 
 class Pointer(object):
 
+    #Constructor of Pointer class, create GUI represrntation of pointer
     def __init__(self, x, y, canvas, color, size):
         self.__direction = 90
         self.x = x
@@ -22,11 +23,13 @@ class Pointer(object):
                                            arrowshape=[2 * size - size // 2,
                                                        2 * size, size // 2])
 
+    #Method, rotate pointer to default direction
     def rotate_to_0(self):
         self.direction = 90
         self.nodes = [(self.x-self.size, self.y), (self.x+self.size, self.y)]
         self.redraw()
 
+    #Method, rotate pointer on given ammount of degreses
     def rotate_pointer(self, angle):
         self.direction += angle
         angle = math.radians(angle)
@@ -44,8 +47,9 @@ class Pointer(object):
 
     @direction.setter
     def direction(self, direction):
-            self.__direction = direction % 360
+            self.__direction = direction % 360 #Taking remainder of division to prevent Integer overflow
 
+    #Method, delete current GUI represrntation, and draw it again
     def redraw(self):
         self.canvas.delete(self.GUI_sign)
         self.GUI_sign = self.canvas.create_line(self.nodes, fill=self.color, arrow=tkinter.FIRST,

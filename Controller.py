@@ -18,7 +18,7 @@ class Controller:
 
     grid = {}
 
-    # Initialization of Controller class
+    # Initialization of the class Controller
     def __init__(self, GUI):
         self.GUI = GUI
         self.GUI.canvas.bind("<Button-1>", lambda event: self.detect_wire(event))
@@ -28,7 +28,8 @@ class Controller:
         self.GUI.delButton["command"] = self.delete_wire
         self.active_wire = 0
 
-    #Event handler, delete selected wire object, fires on "Delete" button pressed
+    #An Event handler, which deletes a selected wire object.
+    # Fires on when "Delete" button is pressed
     def delete_wire(self):
         print("Del wire")
         if self.active_wire:
@@ -36,14 +37,16 @@ class Controller:
             self.wires.remove(self.active_wire)
             self.update_grid()
 
-    #Event handler, update field I of selected wire object according to Scale Widget value, fires on changing value of "Scale" Widget
+    #An Event handler, updates field I of a selected wire object according to "Scale" Widget (Scroll bar) value.
+    # Fires on by change in value of "Scale" Widget.
     def update_wire_I(self, event):
         if self.active_wire:
             self.active_wire.I = self.GUI.scale.get()
             self.update_grid()
             print("Wire I changed")
 
-    #Event handler, set active wire to wire object cloasest to click location, fires on click on Canvas Widget
+    #An Event handler, which sets the wire, which is being the closest to the place of click, active.
+    #  Fires on by the click on "Canvas" Widget.
     def detect_wire(self, event):
         for wire in self.wires:
             if wire.GUI_sign in event.widget.find_closest(event.x, event.y):
@@ -51,7 +54,8 @@ class Controller:
                 print("Wire detected")
                 self.GUI.scale.set(self.active_wire.I)
 
-    #Event handler, reset active wire's X and Y according to location of mouse pointer and update view, fires on mouse pointer moving with pressed Left Mouse Button
+    #An Event handler, which resets active wire's X and Y coordinates according to the location of mouse pointer and updates the view.
+    #  Fires on when the mouse pointer is moving with left button being pressed.
     def move_wire(self, event):
         if self.active_wire:
             self.active_wire.x = event.x
@@ -60,14 +64,15 @@ class Controller:
             self.update_grid()
             print("Wire transited")
 
-    #Method, create new wire with given parameters
+    #A Method, which creates a new wire with given parameters.
     def place_wire(self, x, y, I, color, size):
         print("Wire placed")
         self.wires.append(Wire(x, y, I, color, size, self.GUI.canvas))
         self.active_wire = self.wires[-1]
         self.update_grid()
 
-    #Method, draw arrows on crossing of vertical and horizontal lines, must be called one time after drawing grid
+    #A Method, which draws arrows on the point of intersection of vertical and horizontal lines.
+    # The method is to be called one time after drawing grid.
     def draw_arrows(self, color):
         ppgv = self.GUI.canvas_width / len(self.grid['v'])  # Pointers per grid vertical
         ppgh = self.GUI.canvas_height / len(self.grid['h'])  # Pointers per grid horizontal
@@ -79,11 +84,11 @@ class Controller:
             for y in (range(1, len(self.grid['v']))):
                 self.pointers.append(Pointer(x * ppgh, y * ppgv, self.GUI.canvas, color=color, size=15))
 
-    #Method, calculate magnetic field force with given parameters
+    #A Method, which calculates the magnetic field force with given parameters.
     def mag_field_force(self, I, r):
         return I / (2 * math.pi * r)
 
-    #Method, calculate angle by coordinates of triangle's vertexes
+    #A Method, which calculates the angle using coordinates of triangle's verteces.
     def calc_angle(self, p0, p1, p2):
         a = (p1[0] - p0[0]) ** 2 + (p1[1] - p0[1]) ** 2
         b = (p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2
@@ -93,20 +98,20 @@ class Controller:
             return 360 - int(in_rad * 180 / math.pi)
         return int(in_rad * 180 / math.pi)
 
-    #Method, calculate wire's influence to pointer 
+    #A Method, which calculates the value of wire's influence on a pointer.
     def calc_power(self, pointer, wire):
         distance = math.sqrt((pointer.x - wire.x) ** 2 + (pointer.y - wire.y) ** 2)
         return self.mag_field_force(wire.I, distance)
 
-    #Method, draw grid and fill self.v, self.h with indexes of vertical and horizontal lines
+    #A Method, which draws a grid and fills self.v, self.h in with indexes of vertical and horizontal lines.
     def draw_grid(self, line_number, color):
 
         if len(self.grid) != 0:
             raise Exception("Must be only one Grid")
 
-        g = {}  # Grid
-        v = []  # Verticals
-        h = []  # Horizontals
+        g = {}
+        v = []
+        h = []
 
         for x in range(line_number):
             v.append(self.GUI.canvas.create_line(0, (self.GUI.canvas_width / line_number) * x,
@@ -120,7 +125,8 @@ class Controller:
         g["v"] = v
         self.grid = g
 
-    #Method, calculate wires influence on pointers, rotate pointers, redraw wires
+    #A Method, which calculates the value of wire's influence on pointers and rotates them.
+    # The method also redraws the wires.
     def update_grid(self):
         print("Upd grid...")
         for ptr in range(len(self.pointers)):

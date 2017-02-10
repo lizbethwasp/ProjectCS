@@ -10,7 +10,7 @@ import tkinter
 
 class Pointer(object):
 
-    #Constructor of Pointer class, create GUI represrntation of pointer
+    #A Constructor of Pointer class, which creates GUI represrntation of a pointer.
     def __init__(self, x, y, canvas, color, size):
         self.__direction = 90
         self.x = x

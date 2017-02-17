@@ -5,7 +5,7 @@
 # Platform - PC
 
 
-import math
+import math, sys
 from Classes.Wire import Wire
 from Classes.Pointer import Pointer
 
@@ -20,10 +20,12 @@ class Controller:
 
     # Initialization of the class Controller
     def __init__(self, GUI):
+        RightButton = "<Button-3>"
+        if sys.platform == "darwin": RightButton = "<Button-2>"
         self.GUI = GUI
         self.GUI.canvas.bind("<Button-1>", lambda event: self.detect_wire(event))
         self.GUI.canvas.bind("<B1-Motion>", lambda event: self.move_wire(event))
-        self.GUI.canvas.bind("<Button-2>", lambda event: self.place_wire(event.x, event.y, 0, color="Red", size=15))
+        self.GUI.canvas.bind(RightButton, lambda event: self.place_wire(event.x, event.y, 0, color="Red", size=15))
         self.GUI.scale.bind("<B1-Motion>",self.update_wire_I)
         self.GUI.delButton["command"] = self.delete_wire
         self.active_wire = 0
@@ -31,7 +33,6 @@ class Controller:
     #An Event handler which deletes a selected wire object.
     # Fires on when "Delete" button is pressed
     def delete_wire(self):
-        print("Del wire")
         if self.active_wire:
             self.active_wire.destroy()
             self.wires.remove(self.active_wire)
@@ -43,7 +44,6 @@ class Controller:
         if self.active_wire:
             self.active_wire.I = self.GUI.scale.get()
             self.update_grid()
-            print("Wire I changed")
 
     #An Event handler which sets the wire, which is being the closest to the place of click, active.
     #  Fires on by the click on "Canvas" Widget.
@@ -51,7 +51,6 @@ class Controller:
         for wire in self.wires:
             if wire.GUI_sign in event.widget.find_closest(event.x, event.y):
                 self.active_wire = wire
-                print("Wire detected")
                 self.GUI.scale.set(self.active_wire.I)
 
     #An Event handler which resets active wire's X and Y coordinates according to the location of mouse pointer and updates the view.
@@ -62,11 +61,9 @@ class Controller:
             self.active_wire.y = event.y
             self.active_wire.redraw()
             self.update_grid()
-            print("Wire transited")
 
     #A Method, which creates a new wire with given parameters.
     def place_wire(self, x, y, I, color, size):
-        print("Wire placed")
         self.wires.append(Wire(x, y, I, color, size, self.GUI.canvas))
         self.active_wire = self.wires[-1]
         self.update_grid()
@@ -128,7 +125,6 @@ class Controller:
     #A Method which calculates the value of wire's influence on pointers and rotates them.
     # The method also redraws the wires.
     def update_grid(self):
-        print("Upd grid...")
         for ptr in range(len(self.pointers)):
             self.pointers[ptr].rotate_to_0()
         for wire in self.wires:

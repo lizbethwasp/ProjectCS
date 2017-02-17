@@ -10,7 +10,7 @@ import tkinter
 
 class GUI:
 
-    #Constructor of GUI class, create Widgets (Scale, Button, Canvas, PanedWindow)
+    #A Constructor of GUI class which creates Widgets (Scale, Button, Canvas, PanedWindow)
     def __init__(self, canvas_height, canvas_width):
         self.canvas_width = canvas_width
         self.canvas_height = canvas_height
@@ -23,7 +23,8 @@ class GUI:
         self.delButton = tkinter.Button(self.root, text="Delete")
         self.root.add(self.delButton)
 
-    #Method, "Packing" widgets and run mainloop
+    #A Method which packs the widgets and run mainloop
+    #The method packs all widgets into one master widget
     def show(self):
         self.canvas.pack()
         self.scale.pack()

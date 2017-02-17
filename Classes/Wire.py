@@ -7,7 +7,7 @@
 
 class Wire(object):
 
-    #Constructor of Wire class, draw GUI representation of wire
+    #A Constructor of Wire class which draws GUI representation of a wire
     def __init__(self, x, y, I, color, size, canvas):
         self.x = x
         self.y = y
@@ -28,12 +28,12 @@ class Wire(object):
         self.GUI_sign = canvas.create_oval(x+size, y+size, x-size, y-size, fill=color)
         self.canvas.itemconfig(self.GUI_sign, tags="wire" + str(self.GUI_sign))
 
-    #Method, delete GUI representation of wire
+    #A Method which deletes GUI representation of a selected wire
     def destroy(self):
         self.canvas.delete(self.GUI_sign)
         self.canvas.delete(self.direction_sign)
 
-    #Method, delete current GUI representation of wire and draw it again
+    #A Method which deletes the current GUI representation of a wire and draws it again
     def redraw(self):
         self.canvas.delete(self.GUI_sign)
         self.canvas.delete(self.direction_sign)

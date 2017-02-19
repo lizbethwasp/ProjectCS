@@ -1,4 +1,7 @@
-# Title of IA Solution
+# @author Veranika Boukun
+# @date May 2017
+# Siauliai Dizdvaris Gymnazium
+# Magnetic Field Simulation
 # View.py
 # IDE - PyCharm Community Edition
 # Python 3.6.0
@@ -23,7 +26,7 @@ class GUI:
         self.delButton = tkinter.Button(self.root, text="Delete")
         self.root.add(self.delButton)
 
-    #A Method which packs the widgets and run mainloop
+    #A Method which packs the widgets and runs mainloop
     #The method packs all widgets into one master widget
     def show(self):
         self.canvas.pack()

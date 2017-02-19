@@ -1,4 +1,7 @@
-# Title of IA Solution
+# @author Veranika Boukun
+# @date May 2017
+# Siauliai Dizdvaris Gymnazium
+# Magnetic Field Simulation
 # Wire.by
 # IDE - PyCharm Community Edition
 # Python 3.6.0
